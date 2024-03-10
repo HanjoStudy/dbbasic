@@ -1,6 +1,11 @@
-# dbbasic
 Hanjo Odendaal
 2024-03-10
+
+# dbbasic <img src="man/figures/logo.png" align="right" alt="" width="120" />
+
+[<img src="https://img.shields.io/badge/lifecycle-stable-green.svg"
+class="quarto-discovered-preview-image" />](https://www.tidyverse.org/lifecycle/#experimental)
+[![](https://img.shields.io/github/last-commit/Stellenbosch-Econometrics/sarbR.svg)](https://github.com/HanjoStudy/dbbasic/commits/master)
 
 Package for interacting with `MySQL` and `Greenplum`/`PostgreSQL`
 database
