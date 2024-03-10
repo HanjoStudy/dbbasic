@@ -1,5 +1,3 @@
-Hanjo Odendaal
-2024-03-10
 
 # dbbasic <img src="man/figures/logo.png" align="right" alt="" width="120" />
 

@@ -1,6 +1,4 @@
 ---
-author: "Hanjo Odendaal"
-date: "2024/03/10"
 format: gfm
 editor_options: 
   chunk_output_type: console
