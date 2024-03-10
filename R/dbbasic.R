@@ -3,7 +3,7 @@
 #' @import DBI
 #' @importFrom RMySQL MySQL
 #' @importFrom digest digest
-#' @importFrom RPostgreSQL PostgreSQL
+#' @importFrom RPostgres Postgres
 #' @importFrom glue glue
 #' @importFrom tibble as_tibble
 #'

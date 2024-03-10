@@ -29,11 +29,9 @@ db_connect <- function(db = c("mysql_mysql", "greenplum_warehouse", "psql_wareho
 
   if(grepl("greenplum", db) | grepl("psql", db)){
     db <- gsub("greenplum_|psql_","", db)
-
-    drv <- dbDriver( "PostgreSQL" )
     # Create the database connection
     out <- dbConnect(
-      drv,
+      Postgres(),
       user = Sys.getenv("gp_user"),
       password = Sys.getenv("gp_pass"),
       host = Sys.getenv("gp_host"),
