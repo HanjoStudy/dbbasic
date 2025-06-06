@@ -9,7 +9,7 @@
 #' @return connection
 #' @export
 #'
-db_connect <- function(db = c("mysql_mysql", "greenplum_warehouse", "psql_warehouse")[3]){
+db_connect <- function(db = c("mysql_mysql", "greenplum_warehouse", "psql_warehouse", "clickhouse_warehouse")[3]){
 
   log_debug(glue("Connecting to {db}"))
 
@@ -37,6 +37,20 @@ db_connect <- function(db = c("mysql_mysql", "greenplum_warehouse", "psql_wareho
       host = Sys.getenv("gp_host"),
       port = as.numeric(Sys.getenv("gp_port")),
       dbname = db
+    )
+  }
+
+  if(grepl("clickhouse", db)){
+    db <- gsub("clickhouse_","", db)
+    # Create the database connection
+    out <- dbConnect(
+      clickhouse(),
+      user = Sys.getenv("click_user"),
+      password = Sys.getenv("click_pass"),
+      host = Sys.getenv("click_host"),
+      port = as.numeric(Sys.getenv("click_port")),
+      dbname = db,
+      timeout = 15
     )
   }
 

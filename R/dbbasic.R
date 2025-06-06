@@ -2,6 +2,7 @@
 #' @import logger
 #' @import DBI
 #' @importFrom RMySQL MySQL
+#' @importFrom RClickhouse clickhouse
 #' @importFrom digest digest
 #' @importFrom RPostgres Postgres
 #' @importFrom glue glue
