@@ -1,14 +1,28 @@
 
 # dbbasic <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
-[<img src="https://img.shields.io/badge/lifecycle-stable-green.svg"
-class="quarto-discovered-preview-image" />](https://www.tidyverse.org/lifecycle/#experimental)
+[![](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![](https://img.shields.io/github/last-commit/Stellenbosch-Econometrics/sarbR.svg)](https://github.com/HanjoStudy/dbbasic/commits/master)
 
 Package for interacting with `MySQL` and `Greenplum`/`PostgreSQL`
 database
 
 ## Install
+
+To install this package and its dependencies, you need some system
+libraries (Ubuntu).
+
+``` bash
+sudo apt install -y libmariadb-dev \
+                 libpq-dev \
+                 libssl-dev
+```
+
+``` r
+install.packages(c("RMySQL", "RPostgres", "RClickhouse"))
+```
+
+Then install the package:
 
 ``` r
 remotes::install_github("HanjoStudy/dbbasic")
@@ -33,6 +47,11 @@ mysql_user=user
 mysql_passwd=mypass
 mysql_port=3306
 mysql_host=localhost
+
+click_user=user
+click_passwd=mypass
+click_port=9000
+click_host=localhost
 ```
 
 ## Logging
@@ -49,8 +68,8 @@ log_threshold(DEBUG)
 
 The `db_connect()` function enables connection with either a `MySQL` or
 `PostgreSQL` database. This function takes as an input a concatenation
-between the database server (MySQL or Greenplum/PSQL) and the database
-with that server.
+between the database server (MySQL or Greenplum/PSQL or Clickhouse) and
+the database with that server.
 
 Example usage - connect to the warehouse database on the PostgreSQL
 server.
@@ -60,6 +79,7 @@ library(dbbasic)
 db_connect(db = "psql_datascience")
 db_connect(db = "greenplum_warehouse")
 db_connect(db = "mysql_warehouse")
+db_connect(db = "clickhouse_warehouse")
 ```
 
 ## Query a database
@@ -150,5 +170,5 @@ sapply(month.name[1:3], hash)
 Quick method to get a SQL template:
 
 ``` r
-tibble_to_sql(mtcars, table_name = "mtcars")
+tibble_to_sql(mtcars, table_name = "mtcars", type = c("psql", "mysql", "clickhouse")[1])
 ```

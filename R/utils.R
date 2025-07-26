@@ -6,7 +6,7 @@ db_collapse <- function(txt){
 
 #' @noRd
 #' @export
-hash <- function(x, len = 32){
+hash <- function(x, len = 64){
   if(is.null(x) | is.na(x))
     return(x)
 
@@ -18,37 +18,47 @@ hash <- function(x, len = 32){
 #' @return character
 #'
 #' @export
-tibble_to_sql <- function(df, table_name  = "XXX", type = "psql"){
+tibble_to_sql <- function(df, table_name = "XXX", type = "psql") {
+  library(glue)
+
   # Get the column names and types
   cols <- colnames(df)
   types <- sapply(df, function(x) class(x)[1])
 
-  # Define the mapping from R types to SQL types
-  if(type == "psql"){
-    type_mapping <- list(
+  # Define the type mapping for each SQL flavour
+  type_mapping <- switch(
+    type,
+    "psql" = list(
       Date = "DATE",
-      numeric = "FLOAT",
+      numeric = "DOUBLE PRECISION",
       integer = "INTEGER",
       logical = "BOOLEAN",
       character = "VARCHAR(255)",
       POSIXct = "TIMESTAMP WITHOUT TIME ZONE",
       POSIXlt = "TIMESTAMP WITHOUT TIME ZONE"
-    )
-  }
-
-  if(type == "psql"){
-    type_mapping <- list(
+    ),
+    "mysql" = list(
       Date = "DATE",
       numeric = "DOUBLE",
-      integer = "INTEGER",
+      integer = "INT",
       logical = "BOOLEAN",
       character = "VARCHAR(255)",
       POSIXct = "DATETIME",
       POSIXlt = "DATETIME"
-    )
-  }
+    ),
+    "clickhouse" = list(
+      Date = "Date",
+      numeric = "Float64",
+      integer = "Int32",
+      logical = "UInt8",  # ClickHouse has no BOOLEAN type
+      character = "String",
+      POSIXct = "DateTime",
+      POSIXlt = "DateTime"
+    ),
+    stop(glue("Unsupported SQL type: {type}"))
+  )
 
-  # Get the SQL types for the tibble columns
+  # Get SQL column definitions
   sql_types <- sapply(types, function(x) {
     if (x %in% names(type_mapping)) {
       return(type_mapping[[x]])
@@ -57,9 +67,8 @@ tibble_to_sql <- function(df, table_name  = "XXX", type = "psql"){
     }
   })
 
-  # Generate the SQL statement
-  cols_and_types <- paste(paste(cols, sql_types), collapse = ",\n ")
-  sql_str <- glue("CREATE TABLE {table_name} ({cols_and_types});")
+  cols_and_types <- paste(paste0("`", cols, "` ", sql_types), collapse = ",\n  ")
+  sql_str <- glue("CREATE TABLE `{table_name}` (\n  {cols_and_types}\n);")
 
   cat(sql_str)
 }
