@@ -21,7 +21,7 @@ db_connect <- function(db = c("mysql_mysql", "greenplum_warehouse", "psql_wareho
       host = Sys.getenv("mysql_host"),
       port = as.numeric(Sys.getenv("mysql_port")),
       user = Sys.getenv("mysql_user"),
-      password = Sys.getenv("mysql_passwd"),
+      password = Sys.getenv("mysql_pass"),
       dbname = db,
       timeout = 10
     )

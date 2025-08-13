@@ -44,12 +44,12 @@ gp_port=5432
 gp_host=localhost
 
 mysql_user=user
-mysql_passwd=mypass
+mysql_pass=mypass
 mysql_port=3306
 mysql_host=localhost
 
 click_user=user
-click_passwd=mypass
+click_pass=mypass
 click_port=9000
 click_host=localhost
 ```
