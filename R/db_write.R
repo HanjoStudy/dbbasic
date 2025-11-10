@@ -7,8 +7,6 @@
 #'
 #' @description creates a connection to the DB writes data.frame to table
 #'
-#' @import logger
-#' @importFrom glue glue
 #' @returns logical
 #' @export
 
@@ -26,7 +24,18 @@ db_write <- function(df, table_name, db, type = "append"){
              db = db)
   }
 
-  log_debug(glue("Writing to {db} table: {table_name}"))
+  if(grepl("greenplum", db) | grepl("psql", db)){
+    table_name_og <- table_name
+    table_name <- strsplit(table_name, "\\.")[[1]]
+
+    if(length(table_name) == 1){
+      table_name <- c("public", table_name)
+    }
+
+    table_name <- Id(schema = table_name[1], table = table_name[2])
+  }
+
+  log_debug(glue("Writing to {db} table: {table_name_og}"))
 
   res <- dbWriteTable(conn,  table_name,
                       df,
